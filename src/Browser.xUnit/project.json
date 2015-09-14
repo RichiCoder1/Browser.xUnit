@@ -1,0 +1,31 @@
+﻿{
+  "version": "0.1.0-*",
+  "description": "Browser.xUnit Class Library",
+  "authors": [ "richa" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "xunit.extensibility.execution": "2.1.0-rc1-build3168"
+  },
+
+  "frameworks": {
+    "dotnet": {
+      "System.Collections": "4.0.10",
+      "System.Linq": "4.0.0",
+      "System.Threading": "4.0.10",
+      "System.Runtime": "4.0.20",
+      "Microsoft.CSharp": "4.0.0"
+    },
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Collections": "",
+        "System.Reflection": "",
+        "System.Runtime": "",
+        "System.Threading": "",
+        "System.Threading.Tasks": ""
+      }
+    }
+  }
+}
