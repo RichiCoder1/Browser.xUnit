@@ -12,6 +12,7 @@ namespace Browser.xUnit.Sdk
 {
     public class BrowserTestInvoker : XunitTestInvoker
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Xunit.Sdk.XunitTestInvoker"/> class.
         /// </summary>
@@ -21,15 +22,7 @@ namespace Browser.xUnit.Sdk
         {
         }
 
-
-        /// <summary>
-        /// Invokes the test method on the given test class instance. This method sets up support for "async void"
-        /// test methods, ensures that the test method has the correct number of arguments, then calls <see cref="TestInvoker{TTestCase}.CallTestMethod"/>
-        /// to do the actual method invocation. It ensure that any async test method is fully completed before returning, and
-        /// returns the measured clock time that the invocation took.
-        /// </summary>
-        /// <param name="testClassInstance">The test class instance</param>
-        /// <returns>Returns the time taken to invoke the test method</returns>
+        /// <inheritdoc/>
         protected override async Task<decimal> InvokeTestMethodAsync(object testClassInstance)
         {
             var oldSyncContext = SynchronizationContext.Current;
@@ -49,14 +42,13 @@ namespace Browser.xUnit.Sdk
                             {
                                 Aggregator.Add(
                                     new InvalidOperationException(
-                                        $"The test method expected {parameterCount} parameter value{(parameterCount == 1 ? "" : "s")}, but {valueCount} parameter value{(valueCount == 1 ? "" : "s")} {(valueCount == 1 ? "was" : "were")} provided."
-                                    )
+                                        $"The test method expected {parameterCount} parameter value{(parameterCount == 1 ? "" : "s")}," + 
+                                        $"but {valueCount} parameter value{(valueCount == 1 ? "" : "s")} {(valueCount == 1 ? "was" : "were")} provided.")
                                 );
                             }
                             else
                             {
-                                // TODO: Add extensibility point for allowing class methods to capture relevant environmental information on failure.
-                                var result = CallTestMethod(testClassInstance);
+                                var result = TestMethod.Invoke(testClassInstance, TestMethodArguments);
                                 var task = result as Task;
                                 if (task != null)
                                     await task;
@@ -70,6 +62,18 @@ namespace Browser.xUnit.Sdk
                         }
                     )
                 );
+                
+                if (Aggregator.HasExceptions)
+                {
+                    var handleTestFailure = testClassInstance as INeedToKnowTestFailure;
+                    if (handleTestFailure != null)
+                    {
+                        await
+                            Aggregator.RunAsync(
+                                () => Timer.AggregateAsync(
+                                    () => handleTestFailure.HandleAsync(new TestFailure(Test, Aggregator.ToException()))));
+                    }
+                }
             }
             finally
             {
@@ -77,11 +81,12 @@ namespace Browser.xUnit.Sdk
             }
 
             return Timer.Total;
-        } 
+        }
 
-         [SecuritySafeCritical] 
-         static void SetSynchronizationContext(SynchronizationContext context)
-             => SynchronizationContext.SetSynchronizationContext(context); 
-
+        [SecuritySafeCritical]
+        static void SetSynchronizationContext(SynchronizationContext context)
+        {
+            SynchronizationContext.SetSynchronizationContext(context);
+        }
     }
 }
