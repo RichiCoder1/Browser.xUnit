@@ -45,6 +45,7 @@ artifacts/
 # Build Tooling
 tools/*
 !tools/packages.config
+!tools/**/*.cake
 
 *_i.c
 *_p.c
