@@ -8,5 +8,5 @@ build_script:
 - ps: .\build.ps1
 test: off
 cache:
-- tools\*\ -> tools\packages.config
-- tools\nuget.exe -> appveyor.yml
+- tools -> tools\packages.config
+- .nuget\nuget.exe -> appveyor.yml

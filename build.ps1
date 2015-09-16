@@ -10,8 +10,14 @@ Param(
 )
 
 $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
-$NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
+$NUGET_DIR = Join-Path $PSScriptRoot ".nuget"
+$NUGET_EXE = Join-Path $NUGET_DIR "nuget.exe"
 $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
+
+if(!(Test-Path $NUGET_DIR))
+{
+    mkdir $NUGET_DIR
+}
 
 # Should we use experimental build of Roslyn?
 $UseExperimental = "";
