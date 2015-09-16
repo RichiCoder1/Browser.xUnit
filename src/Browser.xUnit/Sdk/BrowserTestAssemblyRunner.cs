@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,6 +12,8 @@ namespace Browser.xUnit.Sdk
 {
     public class BrowserTestAssemblyRunner : XunitTestAssemblyRunner
     {
+        protected IReadOnlyList<IBeforeAfterAssemblyTests> BeforeAfterHandlers { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Xunit.Sdk.XunitTestAssemblyRunner"/> class.
         /// </summary>
@@ -16,6 +21,11 @@ namespace Browser.xUnit.Sdk
         public BrowserTestAssemblyRunner(ITestAssembly testAssembly, IEnumerable<IXunitTestCase> testCases, IMessageSink diagnosticMessageSink, IMessageSink executionMessageSink, ITestFrameworkExecutionOptions executionOptions)
             : base(testAssembly, testCases, diagnosticMessageSink, executionMessageSink, executionOptions)
         {
+            BeforeAfterHandlers =
+                testAssembly.Assembly.GetCustomAttributes(typeof(BeforeAfterAssemblyTestsAttribute))
+                    .Select(attributeInfo => attributeInfo.GetNamedArgument<Type>("HandlerType"))
+                    .Select(handlerType => ExtensibilityPointFactory.Get<IBeforeAfterAssemblyTests>(diagnosticMessageSink, handlerType))
+                    .ToList();
         }
         
         /// <inheritdoc/>
@@ -24,17 +34,23 @@ namespace Browser.xUnit.Sdk
 
 
         /// <inheritdoc/>
-        protected override Task AfterTestAssemblyStartingAsync()
+        protected override async Task AfterTestAssemblyStartingAsync()
         {
-            // TODO: Add easy extensibility point for global setup.
-            return base.AfterTestAssemblyStartingAsync();
+            await base.AfterTestAssemblyStartingAsync();
+            foreach (var handler in BeforeAfterHandlers)
+            {
+                await handler.BeforeTestAssemblyStartedAsync();
+            }
         }
 
         /// <inheritdoc/>
-        protected override Task BeforeTestAssemblyFinishedAsync()
+        protected override async Task BeforeTestAssemblyFinishedAsync()
         {
-            // TODO: Add easy extensibility point for global teardown.
-            return base.BeforeTestAssemblyFinishedAsync();
+            await base.BeforeTestAssemblyFinishedAsync();
+            foreach (var handler in BeforeAfterHandlers)
+            {
+                await handler.AfterTestAssemblyFinishingAsync();
+            }
         }
     }
 }
