@@ -35,7 +35,7 @@ namespace Browser.xUnit.Sdk
             IMessageSink executionMessageSink,
             ITestFrameworkExecutionOptions executionOptions)
             =>
-                new XunitTestAssemblyRunner(
+                new BrowserTestAssemblyRunner(
                     TestAssembly,
                     testCases,
                     DiagnosticMessageSink,
