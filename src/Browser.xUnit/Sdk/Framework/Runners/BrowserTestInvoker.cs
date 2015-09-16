@@ -71,7 +71,7 @@ namespace Browser.xUnit.Sdk
                         await
                             Aggregator.RunAsync(
                                 () => Timer.AggregateAsync(
-                                    () => handleTestFailure.HandleAsync(new TestFailure(Test, Aggregator.ToException()))));
+                                    () => handleTestFailure.HandleFailureAsync(Test, Aggregator.ToException())));
                     }
                 }
             }
