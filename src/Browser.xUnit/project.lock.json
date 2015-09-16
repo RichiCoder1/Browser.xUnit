@@ -303,12 +303,12 @@
           "xunit.abstractions": "[2.0.0]"
         },
         "compile": {
-          "lib/portable-net45+win8+wp8+wpa81/xunit.core.dll": {}
+          "lib/dotnet/xunit.core.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+win8+wp8+wpa81/xunit.core.dll": {},
-          "lib/portable-net45+win8+wp8+wpa81/xunit.runner.tdnet.dll": {},
-          "lib/portable-net45+win8+wp8+wpa81/xunit.runner.utility.desktop.dll": {}
+          "lib/dotnet/xunit.core.dll": {},
+          "lib/dotnet/xunit.runner.tdnet.dll": {},
+          "lib/dotnet/xunit.runner.utility.desktop.dll": {}
         }
       },
       "xunit.extensibility.execution/2.1.0-rc1-build3168": {
@@ -317,10 +317,10 @@
           "xunit.extensibility.core": "[2.1.0-rc1-build3168]"
         },
         "compile": {
-          "lib/net35/xunit.execution.desktop.dll": {}
+          "lib/dnx451/xunit.execution.dotnet.dll": {}
         },
         "runtime": {
-          "lib/net35/xunit.execution.desktop.dll": {}
+          "lib/dnx451/xunit.execution.dotnet.dll": {}
         }
       }
     },
