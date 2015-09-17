@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ExampleTest", "ExampleTest\ExampleTest.xproj", "{32F7A432-D5BC-47B1-9773-46757C8E47C0}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ExampleTest", "ExampleTest.xproj", "{32F7A432-D5BC-47B1-9773-46757C8E47C0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Browser.xUnit", "..\src\Browser.xUnit\Browser.xUnit.xproj", "{95957F33-8AB2-41A7-88B6-577E2DC35D91}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Browser.xUnit", "..\..\src\Browser.xUnit\Browser.xUnit.xproj", "{95957F33-8AB2-41A7-88B6-577E2DC35D91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

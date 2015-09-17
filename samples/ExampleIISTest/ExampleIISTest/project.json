@@ -1,0 +1,22 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "ExampleIISTest Class Library",
+  "authors": [ "Richard" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+  "dependencies": {
+    "Browser.xUnit": "",
+    "xunit": "2.1.0-rc1-build3168",
+    "xunit.runner.dnx": "2.1.0-beta6-build172",
+    "Microsoft.Framework.Configuration": "1.0.0-beta8-15586",
+    "Microsoft.Framework.Configuration.Json": "1.0.0-beta8-15586",
+    "Microsoft.Net.Http": "2.2.29"
+  },
+  "frameworks": {
+    "dnx451": { }
+  }
+}
