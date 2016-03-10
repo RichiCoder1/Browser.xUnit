@@ -1,43 +1,22 @@
 ﻿{
-  "version": "0.1.0-*",
-  "description": "Browser.xUnit Class Library",
-  "authors": [ "richa" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "version": "0.2.0-*",
+  "description": "xUnit Helper for building Browser Tests",
+  "authors": [ "Richard Simpson" ],
+  "tags": [ "xUnit Browser" ],
+  "projectUrl": "https://github.com/RichiCoder1/Browser.xUnit",
+  "licenseUrl": "https://github.com/RichiCoder1/Browser.xUnit/blob/develop/LICENSE",
 
   "dependencies": {
-    "xunit.extensibility.execution": "2.1.0-rc1-build3168"
+     "xunit.extensibility.execution": "2.1.0"
   },
 
   "frameworks": {
-    "dotnet": {
-      "dependencies": {
-        "System.Collections": "4.0.10",
-        "System.Linq": "4.0.0",
-        "System.Threading": "4.0.10",
-        "System.Runtime": "4.0.20",
-        "System.Reflection": "4.0.10",
-        "Microsoft.CSharp": "4.0.0"
-      }
-    },
-    "dnx451": {
-      "frameworkAssemblies": {
-        "System.Collections": "",
-        "System.Reflection": "",
-        "System.Runtime": "",
-        "System.Threading": "",
-        "System.Threading.Tasks": ""
-      }
-    },
-    "net45": {
-      "frameworkAssemblies": {
-        "System.Collections": "",
-        "System.Reflection": "",
-        "System.Runtime": "",
-        "System.Threading": "",
-        "System.Threading.Tasks": ""
-      }
+    "net451": {
+        "frameworkAssemblies": {
+            "System.Runtime": "",
+            "System.Threading": "",
+            "System.Threading.Tasks": ""
+        }
     }
   }
 }
