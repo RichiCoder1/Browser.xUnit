@@ -1,8 +1,0 @@
-﻿{
-  "Tests": {
-    "ExampleSite": {
-      "Command": "dnx --project C:\\Source\\FOSS\\Browser.xUnit\\samples\\ExampleIISTest\\ExampleSite web",
-      "Url":  "http://localhost:5001"
-    }
-  }
-}

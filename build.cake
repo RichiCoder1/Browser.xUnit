@@ -18,10 +18,6 @@ var artifactsDir = rootDir + Directory("/artifacts");
 var srcDir = rootDir + Directory("/src");
 var toolsDir = rootDir + Directory("/tools");
 
-// Define tool paths
-var dnxDir = toolsDir + Directory("/dnx-clr-win-x86/bin");
-var dnuTool = dnxDir + File("/dnu.cmd");
-
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -36,7 +32,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    var exitCode = StartProcess(dnuTool, new ProcessSettings { Arguments = "restore --parallel --quiet" });
+    var exitCode = StartProcess("dotnet", new ProcessSettings { Arguments = "restore" });
     if(exitCode != 0)
     {
         throw new CakeException("Failed to restore packages.");
@@ -49,14 +45,13 @@ Task("Build")
 {   
     var projectDir = srcDir + Directory("/Browser.xUnit");
     var projectArtifactsDir = artifactsDir + Directory("/bin/Browser.xUnit");
-    StartProcess(dnuTool, new ProcessSettings()
+    StartProcess("dotnet", new ProcessSettings()
         .WithArguments(args => 
         {
             args.Append("pack");
-            args.Append("--quiet");
             args.AppendQuoted(projectDir);
             args.Append("--configuration {0}", configuration);
-            args.Append("--out {0}", projectArtifactsDir);
+            args.Append("--output {0}", projectArtifactsDir);
         }));
 });
 
