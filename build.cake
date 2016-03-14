@@ -74,6 +74,7 @@ Task("Build")
 });
 
 Task("Publish")
+    .IsDependentOn("Update-Version")
     .IsDependentOn("Build")
     .Does(() =>
 {   
@@ -94,7 +95,10 @@ Task("Publish")
     }
     
     if (isAppVeyorBuild) {
-        
+        var nupkgs = GetFiles("./artifacts/**/*.nupkg");
+        foreach (var nupkg in nupkgs) {
+            AppVeyor.UploadArtifact(nupkg);
+        }
     }
 });
 
@@ -104,6 +108,9 @@ Task("Publish")
 
 Task("Default")
     .IsDependentOn("Build");
+    
+Task("CI")
+    .IsDependentOn("Publish");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
