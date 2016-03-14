@@ -1,5 +1,5 @@
 #load "tools/Utilities.cake"
-#line 2
+#addin "Cake.Json"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -18,6 +18,9 @@ var artifactsDir = rootDir + Directory("/artifacts");
 var srcDir = rootDir + Directory("/src");
 var toolsDir = rootDir + Directory("/tools");
 
+var versionInfo = GitVersion();
+var isAppVeyorBuild = AppVeyor.IsRunningOnAppVeyor;
+
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -26,6 +29,18 @@ Task("Clean")
     .Does(() =>
 {
     ResilientCleanDirs(new DirectoryPath[] { artifactsDir });
+});
+
+Task("Update-Version")
+    .Does(() => 
+{
+    var projectFiles = GetFiles("./src/**/project.json");
+    foreach (var jsonFile in projectFiles) {
+        var projectContents = System.IO.File.ReadAllText(jsonFile.FullPath);
+        var json = ParseJson(projectContents);
+        json["version"] = versionInfo.FullSemVer;
+        System.IO.File.WriteAllText(jsonFile.FullPath, json.ToString());
+    }
 });
 
 Task("Restore-NuGet-Packages")
@@ -44,8 +59,27 @@ Task("Build")
     .Does(() =>
 {   
     var projectDir = srcDir + Directory("/Browser.xUnit");
+    var exitCode = StartProcess("dotnet", new ProcessSettings()
+        .WithArguments(args => 
+        {
+            args.Append("build");
+            args.AppendQuoted(projectDir);
+            args.Append("--configuration {0}", configuration);
+        }));
+        
+    if (exitCode != 0)
+    {
+        throw new CakeException("Failed to build project");
+    }
+});
+
+Task("Publish")
+    .IsDependentOn("Build")
+    .Does(() =>
+{   
+    var projectDir = srcDir + Directory("/Browser.xUnit");
     var projectArtifactsDir = artifactsDir + Directory("/bin/Browser.xUnit");
-    StartProcess("dotnet", new ProcessSettings()
+    var exitCode = StartProcess("dotnet", new ProcessSettings()
         .WithArguments(args => 
         {
             args.Append("pack");
@@ -53,6 +87,15 @@ Task("Build")
             args.Append("--configuration {0}", configuration);
             args.Append("--output {0}", projectArtifactsDir);
         }));
+        
+    if (exitCode != 0)
+    {
+        throw new CakeException("Failed to pack project");
+    }
+    
+    if (isAppVeyorBuild) {
+        
+    }
 });
 
 //////////////////////////////////////////////////////////////////////

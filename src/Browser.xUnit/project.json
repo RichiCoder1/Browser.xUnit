@@ -1,22 +1,24 @@
-﻿{
-  "version": "0.2.0-*",
+{
+  "version": "0.1.0-*",
   "description": "xUnit Helper for building Browser Tests",
-  "authors": [ "Richard Simpson" ],
-  "tags": [ "xUnit Browser" ],
+  "authors": [
+    "Richard Simpson"
+  ],
+  "tags": [
+    "xUnit Browser"
+  ],
   "projectUrl": "https://github.com/RichiCoder1/Browser.xUnit",
   "licenseUrl": "https://github.com/RichiCoder1/Browser.xUnit/blob/develop/LICENSE",
-
   "dependencies": {
-     "xunit.extensibility.execution": "2.1.0"
+    "xunit.extensibility.execution": "2.1.0"
   },
-
   "frameworks": {
     "net451": {
-        "frameworkAssemblies": {
-            "System.Runtime": "",
-            "System.Threading": "",
-            "System.Threading.Tasks": ""
-        }
+      "frameworkAssemblies": {
+        "System.Runtime": "",
+        "System.Threading": "",
+        "System.Threading.Tasks": ""
+      }
     }
   }
 }
