@@ -50,9 +50,9 @@ namespace Browser.xUnit.Sdk
                             }
                             else
                             {
-                                var result = TestMethod.Invoke(testClassInstance, TestMethodArguments);
-                                var task = result as Task;
                                 try {
+                                    var result = TestMethod.Invoke(testClassInstance, TestMethodArguments);
+                                    var task = result as Task;
                                     if (task != null)
                                         await task;
                                     else
@@ -80,8 +80,7 @@ namespace Browser.xUnit.Sdk
                     {
                         await
                             Aggregator.RunAsync(
-                                () => Timer.AggregateAsync(
-                                    () => handleTestFailure.HandleFailureAsync(Test, testException)));
+                                    () => handleTestFailure.HandleFailureAsync(Test, testException));
                     }
                 }
             }

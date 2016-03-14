@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xunit.Abstractions;
@@ -8,6 +9,9 @@ namespace Browser.xUnit.Sdk
 {
     public class BrowserTestCase : XunitTestCase
     {
+        [Obsolete("For de-serialization purposes only", error: true)]
+        public BrowserTestCase() { }
+        
         public BrowserTestCase(
             IMessageSink diagnosticMessageSink,
             TestMethodDisplay defaultMethodDisplay,
