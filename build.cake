@@ -38,7 +38,7 @@ Task("Update-Version")
     foreach (var jsonFile in projectFiles) {
         var projectContents = System.IO.File.ReadAllText(jsonFile.FullPath);
         var json = ParseJson(projectContents);
-        json["version"] = versionInfo.FullSemVer;
+        json["version"] = versionInfo.NuGetVersion;
         System.IO.File.WriteAllText(jsonFile.FullPath, json.ToString());
     }
     
@@ -99,18 +99,9 @@ Task("Publish")
     }
     
     if (isAppVeyorBuild) {
-        bool isTag;
-        isTag = bool.TryParse(EnvironmentVariable("APPVEYOR_REPO_TAG"), out isTag) && isTag;
-        var apiKey = EnvironmentVariable("NUGET_API_KEY");
-        
         var nupkgs = GetFiles("./artifacts/**/*.nupkg");
         foreach (var nupkg in nupkgs) {
             AppVeyor.UploadArtifact(nupkg);
-            if (isTag) {
-                NuGetPush(nupkg, new NuGetPushSettings {
-                    ApiKey = apiKey
-                });
-            }
         }
     }
 });
