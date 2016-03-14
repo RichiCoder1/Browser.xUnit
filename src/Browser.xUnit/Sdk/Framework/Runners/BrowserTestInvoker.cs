@@ -31,6 +31,8 @@ namespace Browser.xUnit.Sdk
             {
                 var asyncSyncContext = new AsyncTestSyncContext(oldSyncContext);
                 SetSynchronizationContext(asyncSyncContext);
+                
+                Exception testException = null;
 
                 await Aggregator.RunAsync(
                     () => Timer.AggregateAsync(
@@ -50,20 +52,28 @@ namespace Browser.xUnit.Sdk
                             {
                                 var result = TestMethod.Invoke(testClassInstance, TestMethodArguments);
                                 var task = result as Task;
-                                if (task != null)
-                                    await task;
-                                else
-                                {
-                                    var ex = await asyncSyncContext.WaitForCompletionAsync();
-                                    if (ex != null)
-                                        Aggregator.Add(ex);
+                                try {
+                                    if (task != null)
+                                        await task;
+                                    else
+                                    {
+                                        var ex = await asyncSyncContext.WaitForCompletionAsync();
+                                        if (ex != null)
+                                        {
+                                            testException = ex;
+                                            Aggregator.Add(ex);
+                                        }
+                                    }
+                                } catch (Exception ex) {
+                                    testException = ex;
+                                    throw;
                                 }
                             }
                         }
                     )
                 );
                 
-                if (Aggregator.HasExceptions)
+                if (testException != null)
                 {
                     var handleTestFailure = testClassInstance as INeedToKnowTestFailure;
                     if (handleTestFailure != null)
@@ -71,7 +81,7 @@ namespace Browser.xUnit.Sdk
                         await
                             Aggregator.RunAsync(
                                 () => Timer.AggregateAsync(
-                                    () => handleTestFailure.HandleFailureAsync(Test, Aggregator.ToException())));
+                                    () => handleTestFailure.HandleFailureAsync(Test, testException)));
                     }
                 }
             }
