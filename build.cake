@@ -41,6 +41,10 @@ Task("Update-Version")
         json["version"] = versionInfo.FullSemVer;
         System.IO.File.WriteAllText(jsonFile.FullPath, json.ToString());
     }
+    
+    if (isAppVeyorBuild) {
+        AppVeyor.UpdateBuildVersion(versionInfo.FullSemVer);
+    }
 });
 
 Task("Restore-NuGet-Packages")
@@ -95,9 +99,17 @@ Task("Publish")
     }
     
     if (isAppVeyorBuild) {
+        var isMaster = string.IsNullOrWhiteSpace(versionInfo.PreReleaseLabel);
+        var apiKey = EnvironmentVariable("NUGET_API_KEY");
+        
         var nupkgs = GetFiles("./artifacts/**/*.nupkg");
         foreach (var nupkg in nupkgs) {
             AppVeyor.UploadArtifact(nupkg);
+            if (isMaster) {
+                NuGetPush(nupkg, new NuGetPushSettings {
+                    ApiKey = apiKey
+                });
+            }
         }
     }
 });
