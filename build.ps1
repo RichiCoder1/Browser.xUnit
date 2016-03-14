@@ -64,7 +64,9 @@ if((Get-Command "dotnet" -ErrorAction SilentlyContinue) -eq $null)
 	{
 		throw "Failed to install dotnet"
 	}
-	$env:Path += ";$env:LocalAppData\Microsoft\dotnet\cli\bin"
+	
+	$env:DOTNET_HOME = "$InstallDir\cli\bin"
+	$env:Path += "$InstallDir\cli\bin;$env:Path"
 }
 
 # Start Cake
