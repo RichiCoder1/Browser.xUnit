@@ -99,13 +99,14 @@ Task("Publish")
     }
     
     if (isAppVeyorBuild) {
-        var isMaster = string.IsNullOrWhiteSpace(versionInfo.PreReleaseLabel);
+        bool isTag;
+        isTag = bool.TryParse(EnvironmentVariable("APPVEYOR_REPO_TAG"), out isTag) && isTag;
         var apiKey = EnvironmentVariable("NUGET_API_KEY");
         
         var nupkgs = GetFiles("./artifacts/**/*.nupkg");
         foreach (var nupkg in nupkgs) {
             AppVeyor.UploadArtifact(nupkg);
-            if (isMaster) {
+            if (isTag) {
                 NuGetPush(nupkg, new NuGetPushSettings {
                     ApiKey = apiKey
                 });
