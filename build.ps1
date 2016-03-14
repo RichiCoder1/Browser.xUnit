@@ -55,12 +55,16 @@ if (!(Test-Path $CAKE_EXE)) {
 }
 
 # Make sure dotnet is installed
-start powershell -Wait -NoNewWindow -ArgumentList @("-NoProfile", "-ExecutionPolicy", "unrestricted", "-Command", """&{iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/install.ps1'))}""")
-
-$InstallDir = "$env:LocalAppData\Microsoft\dotnet"
-if (!(Test-Path $InstallDir)) 
+if((Get-Command "dotnet" -ErrorAction SilentlyContinue) -eq $null)
 {
-	throw "Failed to install dotnet"
+	Invoke-WebRequest -Uri https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/install.ps1 -OutFile install.ps1
+	./install.ps1 -version 1.0.0.001718 -channel beta
+	$InstallDir = "$env:LocalAppData\Microsoft\dotnet"
+	if (!(Test-Path $InstallDir)) 
+	{
+		throw "Failed to install dotnet"
+	}
+	$env:Path += ";$env:LocalAppData\Microsoft\dotnet\cli\bin"
 }
 
 # Start Cake
