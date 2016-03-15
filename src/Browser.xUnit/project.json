@@ -16,10 +16,11 @@
     "net451": {
       "frameworkAssemblies": {
         "System.Runtime": {
-          "version": "",
           "type": "build"
         },
-        "System.Threading.Tasks": ""
+        "System.Threading.Tasks": {
+          "type": "build"
+        }
       }
     }
   }
