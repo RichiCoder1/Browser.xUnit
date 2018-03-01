@@ -1,3 +1,7 @@
+##### UNMAINTAINED
+#### This project is unmaintained. It was an experiment, and I have no plans for develop it further.
+
+
 # Browser.xUnit
 A helper framework for executing browser oriented tests.
 
